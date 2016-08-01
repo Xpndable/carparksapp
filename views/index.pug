@@ -1,0 +1,72 @@
+doctype html
+html(lang="en")
+  head
+    meta(name="apple-mobile-web-app-capable", content="yes")
+    meta(name="mobile-web-app-capable", content="yes")
+    meta(name="format-detection", content="telephone=no")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Denver Carparks App
+    script(type="text/javascript", src="/js/main.js")
+    script(type="text/javascript", src="/js/fetch.js")
+    link(rel="stylesheet", type="text/css", href="/css/main.css")
+  body
+    h2 Denver Carparks App
+    #lightbox(style={display: "none"})
+      #passwordScreen
+        #passwordLabel Please enter your password
+        input#passwordEntry(type="password")
+        button(onclick="passwordSubmit()") Submit
+    #topParks
+      each val in ['19','20','21','22','23','24','25']
+        each carpark in carparks
+          if val==carpark.parkno
+            if carpark.status=="reserved"
+              .topParkSpace(id=val + 'space', style={background: 'lightblue'})=val
+                | 
+                = carpark.label
+            else if carpark.status=="available"
+              .topParkSpace(id=val + 'space', style={background: 'lightgreen'})=val
+                | 
+                = carpark.label
+            else if carpark.status=="taken"
+              .topParkSpace(id=val + 'space', style={background: 'red'})=val
+                | 
+                = carpark.label
+    #bottomParks
+      each val in ['29','30','31']
+        each carpark in carparks
+          if val==carpark.parkno
+            if carpark.status=="reserved"
+              .bottomParkSpace(id=val + 'space', style={background: 'lightblue'})=carpark.label
+                | 
+                = val
+            else if carpark.status=="available"
+              .bottomParkSpace(id=val + 'space', style={background: 'lightgreen'})=carpark.label
+                | 
+                = val
+            else if carpark.status=="taken"
+              .bottomParkSpace(id=val + 'space', style={background: 'red'})=carpark.label
+                | 
+                = val
+    #buttonsArea
+      each carpark in carparks
+        .parkActions
+          .parkLabel=carpark.parkno
+          .parkButtons
+            if carpark.status=="taken"
+              button(value="taken", disabled="true") Take
+            else if carpark.status=="reserved"
+              button(value="taken", data-reserved="true", onclick="updateStatus(this, '" + carpark.parkno + "')") Take
+            else
+              button(value="taken", onclick="updateStatus(this, '" + carpark.parkno + "')") Take
+            if carpark.status=="available"
+              button(value="available", disabled="true") Free
+            else if carpark.status=="reserved"
+              button(value="available", data-reserved="true", onclick="updateStatus(this, '" + carpark.parkno + "')") Free
+            else
+              button(value="available", onclick="updateStatus(this, '" + carpark.parkno + "')") Free
+            if carpark.type=="reserved"
+              if carpark.status=="reserved"
+                button(value="reserved", disabled="true") Reserve
+              else
+                button(value="reserved", onclick="updateStatus(this, '" + carpark.parkno + "')") Reserve
