@@ -11,3 +11,5 @@ in the back end database.
 The database is not provided in this code base, only the node.js implementation
 
 To see a working demonstration, visit http://carparks.xpndb.me/
+
+In the demo, all reserved carpark passwords are "admin"
